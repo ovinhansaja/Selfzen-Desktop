@@ -39,7 +39,7 @@ public class Menu extends javax.swing.JFrame {
         logout = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setPreferredSize(new java.awt.Dimension(500, 600));
+        setUndecorated(true);
         setSize(new java.awt.Dimension(500, 600));
 
         head.setBackground(new java.awt.Color(47, 46, 65));

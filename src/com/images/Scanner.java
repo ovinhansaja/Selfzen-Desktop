@@ -31,7 +31,6 @@ public class Scanner extends javax.swing.JFrame {
 
         head = new javax.swing.JPanel();
         close = new javax.swing.JButton();
-        minimize = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
         confirm = new javax.swing.JButton();
 
@@ -60,42 +59,18 @@ public class Scanner extends javax.swing.JFrame {
             }
         });
 
-        minimize.setBackground(new java.awt.Color(47, 46, 65));
-        minimize.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
-        minimize.setForeground(java.awt.Color.white);
-        minimize.setText("-");
-        minimize.setBorder(null);
-        minimize.setBorderPainted(false);
-        minimize.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-        minimize.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                minimizeMouseEntered(evt);
-            }
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                minimizeMouseExited(evt);
-            }
-        });
-        minimize.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                minimizeActionPerformed(evt);
-            }
-        });
-
         javax.swing.GroupLayout headLayout = new javax.swing.GroupLayout(head);
         head.setLayout(headLayout);
         headLayout.setHorizontalGroup(
             headLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, headLayout.createSequentialGroup()
-                .addGap(0, 700, Short.MAX_VALUE)
-                .addComponent(minimize, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, 0)
+                .addGap(0, 0, Short.MAX_VALUE)
                 .addComponent(close, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, 0))
         );
         headLayout.setVerticalGroup(
             headLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(close, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-            .addComponent(minimize, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
 
         jPanel1.setBackground(java.awt.Color.black);
@@ -128,10 +103,7 @@ public class Scanner extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(head, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(0, 0, 0)
-                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGap(0, 0, Short.MAX_VALUE))
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -160,21 +132,6 @@ public class Scanner extends javax.swing.JFrame {
         // TODO add your handling code here:
         System.exit(0);
     }//GEN-LAST:event_closeActionPerformed
-
-    private void minimizeMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_minimizeMouseEntered
-        // TODO add your handling code here:
-        minimize.setBackground(new Color(14,132,116));
-    }//GEN-LAST:event_minimizeMouseEntered
-
-    private void minimizeMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_minimizeMouseExited
-        // TODO add your handling code here:
-        minimize.setBackground(new Color(47,46,65));
-    }//GEN-LAST:event_minimizeMouseExited
-
-    private void minimizeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_minimizeActionPerformed
-        // TODO add your handling code here:
-        setState(JFrame.ICONIFIED);
-    }//GEN-LAST:event_minimizeActionPerformed
 
     /**
      * @param args the command line arguments
@@ -217,6 +174,5 @@ public class Scanner extends javax.swing.JFrame {
     private javax.swing.JButton confirm;
     private javax.swing.JPanel head;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JButton minimize;
     // End of variables declaration//GEN-END:variables
 }
