@@ -82,6 +82,7 @@ public class Scan extends javax.swing.JFrame {
         scan.setForeground(java.awt.Color.white);
         scan.setText("Scan");
         scan.setBorder(null);
+        scan.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
