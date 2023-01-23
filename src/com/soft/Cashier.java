@@ -200,6 +200,19 @@ public class Cashier extends javax.swing.JFrame {
         QR.setForeground(java.awt.Color.white);
         QR.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/images/QR scaner.png"))); // NOI18N
         QR.setBorder(null);
+        QR.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                QRMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                QRMouseExited(evt);
+            }
+        });
+        QR.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                QRActionPerformed(evt);
+            }
+        });
 
         logout.setBackground(java.awt.Color.gray);
         logout.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/images/log-out 1.png"))); // NOI18N
@@ -385,6 +398,22 @@ public class Cashier extends javax.swing.JFrame {
         Login login = new Login();
         login.setVisible(true);
     }//GEN-LAST:event_logoutActionPerformed
+
+    private void QRMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_QRMouseEntered
+        // TODO add your handling code here:
+        QR.setBackground(new Color(14,132,116));
+    }//GEN-LAST:event_QRMouseEntered
+
+    private void QRMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_QRMouseExited
+        // TODO add your handling code here:
+        QR.setBackground(new Color(47,46,65));
+    }//GEN-LAST:event_QRMouseExited
+
+    private void QRActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_QRActionPerformed
+        // TODO add your handling code here:
+        Scan scan = new Scan();
+        scan.setVisible(true);
+    }//GEN-LAST:event_QRActionPerformed
 
     /**
      * @param args the command line arguments
