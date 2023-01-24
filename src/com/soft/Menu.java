@@ -7,10 +7,6 @@ package com.soft;
 import java.awt.Color;
 import javax.swing.JFrame;
 
-/**
- *
- * @author Ovin Hansaja
- */
 public class Menu extends javax.swing.JFrame {
 
     /**
@@ -114,6 +110,7 @@ public class Menu extends javax.swing.JFrame {
         cashiermanagement.setText("<html><p>Cashier</p> <br><p>Management</p></html>"); // NOI18N
         cashiermanagement.setActionCommand("<html><p style=\"text-align: center;\">Cashier</p> <p style=\"text-align: center;\">Management</p></html>");
         cashiermanagement.setBorder(null);
+        cashiermanagement.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         cashiermanagement.setHorizontalTextPosition(javax.swing.SwingConstants.LEADING);
         cashiermanagement.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseEntered(java.awt.event.MouseEvent evt) {
@@ -134,6 +131,7 @@ public class Menu extends javax.swing.JFrame {
         reports.setForeground(java.awt.Color.white);
         reports.setText("Reports");
         reports.setBorder(null);
+        reports.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         reports.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 reportsMouseEntered(evt);
