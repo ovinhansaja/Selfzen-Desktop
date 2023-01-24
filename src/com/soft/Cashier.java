@@ -188,18 +188,37 @@ public class Cashier extends javax.swing.JFrame {
         confirm.setForeground(java.awt.Color.white);
         confirm.setText("Confirm");
         confirm.setBorder(null);
+        confirm.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        confirm.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                confirmMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                confirmMouseExited(evt);
+            }
+        });
 
         cancel.setBackground(new java.awt.Color(156, 24, 24));
         cancel.setFont(new java.awt.Font("Tw Cen MT", 0, 20)); // NOI18N
         cancel.setForeground(java.awt.Color.white);
         cancel.setText("Cancel");
         cancel.setBorder(null);
+        cancel.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        cancel.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                cancelMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                cancelMouseExited(evt);
+            }
+        });
 
         QR.setBackground(new java.awt.Color(47, 46, 65));
         QR.setFont(new java.awt.Font("Tw Cen MT", 0, 36)); // NOI18N
         QR.setForeground(java.awt.Color.white);
         QR.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/images/QR scaner.png"))); // NOI18N
         QR.setBorder(null);
+        QR.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         QR.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 QRMouseEntered(evt);
@@ -415,6 +434,30 @@ public class Cashier extends javax.swing.JFrame {
         Scan scan = new Scan();
         scan.setVisible(true);
     }//GEN-LAST:event_QRActionPerformed
+
+    private void confirmMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_confirmMouseEntered
+        // TODO add your handling code here:
+        confirm.setBackground(new Color(76,134,81));
+        confirm.setForeground(Color.black);
+    }//GEN-LAST:event_confirmMouseEntered
+
+    private void confirmMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_confirmMouseExited
+        // TODO add your handling code here:
+        confirm.setBackground(new Color(7,108,17));
+        confirm.setForeground(Color.white);
+    }//GEN-LAST:event_confirmMouseExited
+
+    private void cancelMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_cancelMouseEntered
+        // TODO add your handling code here:
+        cancel.setBackground(new Color(180,96,96));
+        cancel.setForeground(Color.black);
+    }//GEN-LAST:event_cancelMouseEntered
+
+    private void cancelMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_cancelMouseExited
+        // TODO add your handling code here:
+        cancel.setBackground(new Color(156,24,24));
+        cancel.setForeground(Color.black);
+    }//GEN-LAST:event_cancelMouseExited
 
     /**
      * @param args the command line arguments
