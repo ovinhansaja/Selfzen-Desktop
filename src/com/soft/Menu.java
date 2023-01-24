@@ -7,10 +7,6 @@ package com.soft;
 import java.awt.Color;
 import javax.swing.JFrame;
 
-/**
- *
- * @author Ovin Hansaja
- */
 public class Menu extends javax.swing.JFrame {
 
     /**
