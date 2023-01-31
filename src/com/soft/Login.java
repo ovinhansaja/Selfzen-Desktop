@@ -24,7 +24,9 @@ public class Login extends javax.swing.JFrame {
         initComponents();
         con = DB_conection.connect();
     }
-
+    
+    //String cash_nic=txt_username.getText();
+    
   
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -415,13 +417,17 @@ public class Login extends javax.swing.JFrame {
             pstCash.setString(2, txt_password.getText());
             ResultSet rsCash=pstCash.executeQuery();
             
+            
             if(rs.next()){
                 dispose(); 
                 Menu menu = new Menu();
                 menu.setVisible(true);
             }else if(rsCash.next()){
+                
+            String cusnic=txt_username.getText();
+                
                 dispose();
-                Cashier cashier = new Cashier();
+                Cashier cashier = new Cashier(cusnic);
                 cashier.setVisible(true);
             }else {
                 JOptionPane.showMessageDialog(null, "IF you are admin please check user name and password otherwise check the your NIC Number and password");
