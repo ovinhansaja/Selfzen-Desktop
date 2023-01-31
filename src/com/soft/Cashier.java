@@ -1,5 +1,6 @@
 package com.soft;
 
+import com.code.CallBackInterface;
 import com.code.DB_conection;
 import java.awt.Color;
 import java.sql.Connection;
@@ -11,13 +12,37 @@ import javax.swing.table.DefaultTableModel;
 
 public class Cashier extends javax.swing.JFrame {
 
-    Connection con = null;
+    Connection con=null;
     PreparedStatement pst = null;
+    PreparedStatement pstUP= null;
            
 
     public Cashier() {
         initComponents();
         con = DB_conection.connect();
+        
+        
+    }
+ 
+    public Cashier(String cash_nic) {
+         initComponents();
+         txt_nic.setText(cash_nic);
+         con = DB_conection.connect();
+         
+            String cashiernic=txt_nic.getText();
+        try {
+            
+            String sqlGetID ="SELECT * FROM cashier WHERE cash_nic='"+cashiernic+"';";
+            pst = con.prepareStatement(sqlGetID);
+            ResultSet rs1 = pst.executeQuery();
+            
+            if(rs1.next()){
+            txt_nicID.setText(rs1.getString(1));
+            txtcashName.setText(rs1.getString(2));
+            }
+        } catch (Exception e) {
+        }
+       
     }
 
     @SuppressWarnings("unchecked")
@@ -40,16 +65,21 @@ public class Cashier extends javax.swing.JFrame {
         txtDisc = new javax.swing.JLabel();
         txtBalance = new javax.swing.JLabel();
         txtAmountPay = new javax.swing.JTextField();
-        photo = new javax.swing.JLabel();
-        jLabel10 = new javax.swing.JLabel();
-        jLabel11 = new javax.swing.JLabel();
+        txt_nic = new javax.swing.JLabel();
         confirm = new javax.swing.JButton();
         cancel = new javax.swing.JButton();
         QR = new javax.swing.JButton();
         logout = new javax.swing.JButton();
         txtPayble = new javax.swing.JLabel();
         jLabel13 = new javax.swing.JLabel();
-        confirm1 = new javax.swing.JButton();
+        btnLoad = new javax.swing.JButton();
+        txt_billD = new javax.swing.JLabel();
+        discount1 = new javax.swing.JLabel();
+        txtcashName = new javax.swing.JLabel();
+        txt_nicID = new javax.swing.JLabel();
+        discount2 = new javax.swing.JLabel();
+        discount3 = new javax.swing.JLabel();
+        discount4 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setUndecorated(true);
@@ -128,9 +158,17 @@ public class Cashier extends javax.swing.JFrame {
 
             },
             new String [] {
-                "CODE", "ITEM NAME", "PRICE", "QTY.", "DISCOUNT"
+                "ITEM NAME", "PRICE", "QTY.", "DISCOUNT"
             }
-        ));
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
         bill.setPreferredSize(new java.awt.Dimension(550, 360));
         bill.setRowHeight(30);
         jScrollPane1.setViewportView(bill);
@@ -180,13 +218,8 @@ public class Cashier extends javax.swing.JFrame {
             }
         });
 
-        photo.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-
-        jLabel10.setFont(new java.awt.Font("Tw Cen MT", 1, 24)); // NOI18N
-        jLabel10.setText("asfsdfd");
-
-        jLabel11.setFont(new java.awt.Font("Tw Cen MT", 0, 22)); // NOI18N
-        jLabel11.setText("sasdasasd");
+        txt_nic.setFont(new java.awt.Font("Tw Cen MT", 1, 24)); // NOI18N
+        txt_nic.setText("asfsdfd");
 
         confirm.setBackground(new java.awt.Color(7, 108, 17));
         confirm.setFont(new java.awt.Font("Tw Cen MT", 0, 20)); // NOI18N
@@ -200,6 +233,11 @@ public class Cashier extends javax.swing.JFrame {
             }
             public void mouseExited(java.awt.event.MouseEvent evt) {
                 confirmMouseExited(evt);
+            }
+        });
+        confirm.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                confirmActionPerformed(evt);
             }
         });
 
@@ -265,49 +303,81 @@ public class Cashier extends javax.swing.JFrame {
 
         jLabel13.setFont(new java.awt.Font("Tw Cen MT", 1, 24)); // NOI18N
 
-        confirm1.setBackground(new java.awt.Color(7, 108, 17));
-        confirm1.setFont(new java.awt.Font("Tw Cen MT", 0, 20)); // NOI18N
-        confirm1.setForeground(java.awt.Color.white);
-        confirm1.setText("Cal Bill");
-        confirm1.setBorder(null);
-        confirm1.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        confirm1.addMouseListener(new java.awt.event.MouseAdapter() {
+        btnLoad.setBackground(new java.awt.Color(7, 108, 17));
+        btnLoad.setFont(new java.awt.Font("Tw Cen MT", 0, 20)); // NOI18N
+        btnLoad.setForeground(java.awt.Color.white);
+        btnLoad.setText("Cal Bill");
+        btnLoad.setBorder(null);
+        btnLoad.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnLoad.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseEntered(java.awt.event.MouseEvent evt) {
-                confirm1MouseEntered(evt);
+                btnLoadMouseEntered(evt);
             }
             public void mouseExited(java.awt.event.MouseEvent evt) {
-                confirm1MouseExited(evt);
+                btnLoadMouseExited(evt);
             }
         });
-        confirm1.addActionListener(new java.awt.event.ActionListener() {
+        btnLoad.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                confirm1ActionPerformed(evt);
+                btnLoadActionPerformed(evt);
             }
         });
+
+        txt_billD.setFont(new java.awt.Font("Tw Cen MT", 0, 22)); // NOI18N
+        txt_billD.setText("sasdasasd");
+
+        discount1.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
+        discount1.setText("Bill ID");
+
+        txtcashName.setFont(new java.awt.Font("Tw Cen MT", 1, 24)); // NOI18N
+        txtcashName.setText("asfsdfd");
+
+        txt_nicID.setFont(new java.awt.Font("Tw Cen MT", 1, 24)); // NOI18N
+        txt_nicID.setText("asfsdfd");
+
+        discount2.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
+        discount2.setText("Cashier Name");
+
+        discount3.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
+        discount3.setText("Cashier NIC");
+
+        discount4.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
+        discount4.setText("Cashier ID");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(50, 50, 50)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(photo, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(232, 232, 232)
+                        .addComponent(jLabel13, javax.swing.GroupLayout.PREFERRED_SIZE, 172, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(32, 32, 32)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(50, 50, 50)
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 350, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(discount2, javax.swing.GroupLayout.PREFERRED_SIZE, 163, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(discount3, javax.swing.GroupLayout.PREFERRED_SIZE, 163, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(discount4, javax.swing.GroupLayout.PREFERRED_SIZE, 163, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(36, 36, 36)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(txt_nic, javax.swing.GroupLayout.PREFERRED_SIZE, 163, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(txtcashName, javax.swing.GroupLayout.PREFERRED_SIZE, 163, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(txt_nicID, javax.swing.GroupLayout.PREFERRED_SIZE, 163, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(100, 100, 100)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(jPanel1Layout.createSequentialGroup()
-                                        .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addGap(40, 40, 40)
-                                        .addComponent(confirm1, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(32, 32, 32)
-                                .addComponent(jLabel13, javax.swing.GroupLayout.PREFERRED_SIZE, 172, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 720, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 83, Short.MAX_VALUE)
+                                        .addComponent(btnLoad, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addGap(15, 15, 15)
+                                        .addComponent(discount1, javax.swing.GroupLayout.PREFERRED_SIZE, 163, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(txt_billD, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 720, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 108, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -344,55 +414,61 @@ public class Cashier extends javax.swing.JFrame {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(50, 50, 50)
+                .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(10, 10, 10)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txt_tot, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(24, 24, 24)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtDisc, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(discount, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(20, 20, 20)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtPayble, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(20, 20, 20)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtAmountPay, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(20, 20, 20)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtBalance, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(56, 56, 56)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(cancel, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(confirm, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addComponent(QR, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(logout)
+                .addGap(12, 12, 12))
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(78, 78, 78)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 390, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(10, 10, 10)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(txt_tot, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(24, 24, 24)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(txtDisc, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(discount, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(20, 20, 20)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(txtPayble, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(20, 20, 20)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(txtAmountPay, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(20, 20, 20)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(txtBalance, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 390, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(45, 45, 45)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(photo, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addContainerGap(61, Short.MAX_VALUE))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(confirm1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jLabel13))))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(cancel, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(confirm, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(18, 18, 18)
-                        .addComponent(QR, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 32, Short.MAX_VALUE)
-                        .addComponent(logout)
-                        .addGap(12, 12, 12))))
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(txt_billD, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(discount1, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(27, 27, 27)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(txtcashName, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(discount2, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(8, 8, 8)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(btnLoad, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(txt_nic, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(discount3, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addGap(28, 28, 28)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txt_nicID, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(discount4, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(43, 43, 43)
+                .addComponent(jLabel13))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -400,24 +476,23 @@ public class Cashier extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(head, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(head, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 12, Short.MAX_VALUE)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
         pack();
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
-
+    
+    
     private void closeMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_closeMouseEntered
         // TODO add your handling code here:
         close.setBackground(new Color(14, 132, 116));
@@ -477,10 +552,20 @@ public class Cashier extends javax.swing.JFrame {
 
     private void QRActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_QRActionPerformed
         // TODO add your handling code here:
-        Scan scan = new Scan();
+        Scan scan = new Scan(new CallBackInterface() {
+            @Override
+            public void calback(String id) {
+                txt_billD.setText(id);
+                
+            }
+        });
+        
         scan.setVisible(true);
     }//GEN-LAST:event_QRActionPerformed
-
+    
+    
+    
+    
     private void confirmMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_confirmMouseEntered
         // TODO add your handling code here:
         confirm.setBackground(new Color(76, 134, 81));
@@ -505,40 +590,42 @@ public class Cashier extends javax.swing.JFrame {
         cancel.setForeground(Color.black);
     }//GEN-LAST:event_cancelMouseExited
 
-    private void confirm1MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_confirm1MouseEntered
+    private void btnLoadMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnLoadMouseEntered
         // TODO add your handling code here:
-    }//GEN-LAST:event_confirm1MouseEntered
+    }//GEN-LAST:event_btnLoadMouseEntered
 
-    private void confirm1MouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_confirm1MouseExited
+    private void btnLoadMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnLoadMouseExited
         // TODO add your handling code here:
-    }//GEN-LAST:event_confirm1MouseExited
+    }//GEN-LAST:event_btnLoadMouseExited
 
-    private void confirm1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_confirm1ActionPerformed
-
+    private void btnLoadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoadActionPerformed
         try {
-            String sql = "SELECT bill.bill_id,i.item_name,i.i_price,oh.quantity,I.i_discount FROM customer cus INNER JOIN bill_history bill ON cus.mobile_num=bill.mobile_num INNER JOIN order_history oh ON bill.bill_id=oh.bill_id INNER JOIN item i ON oh.item_id=i.item_id;";
-            //String sql = "SELECT * FROM customer";
+            
+            String BillID=txt_billD.getText();
+            String sql = "SELECT i.item_name,i.i_price,bi.qty,i.i_discount FROM bill b INNER JOIN bill_item bi ON b.bill_id=bi.bill_id INNER JOIN item i ON bi.item_id=i.item_id WHERE b.bill_id='"+BillID+"';";
+           
             pst = con.prepareStatement(sql);
             ResultSet rs = pst.executeQuery();
             DefaultTableModel model = (DefaultTableModel) bill.getModel();
             model.setRowCount(0);
 
-            
             while (rs.next()) {
 
-                Object data[] = {rs.getString("bill_id"), rs.getString("item_name"), rs.getString("i_price"), rs.getString("quantity"), rs.getString("i_discount")};
+                Object data[] = {rs.getString("item_name"), rs.getString("i_price"), rs.getString("qty"), rs.getString("i_discount")};
                 model.addRow(data);
                 
+               
                 int numrow=bill.getRowCount();
                 double payble=0; 
                 double tot =0;
                 double distot=0;
                 
+                
                 for(int i=0;i<numrow;i++){
-                    
-                            double price=Double.parseDouble(bill.getValueAt(i, 2).toString());
-                            double qty=Double.parseDouble(bill.getValueAt(i, 3).toString());
-                            double dis=Double.parseDouble(bill.getValueAt(i, 4).toString());
+                            
+                            double price=Double.parseDouble(bill.getValueAt(i, 1).toString());
+                            double qty=Double.parseDouble(bill.getValueAt(i, 2).toString());
+                            double dis=Double.parseDouble(bill.getValueAt(i, 3).toString());
            
                             double val= price*qty;
                             tot+=val;
@@ -548,28 +635,21 @@ public class Cashier extends javax.swing.JFrame {
                             distot+=disPriceQTY;
                          
                             }
+                
                 txt_tot.setText(Double.toString(tot));
                 txtDisc.setText(Double.toString(distot));
                 
                 payble=tot-distot;
                 txtPayble.setText(Double.toString(payble));
-               
-                
-                
-                /*String cusID=rs.getString("bill_id");
-           txtCusID.setText(cusID);*/
-              //cal bill
-          /*  float price =Float.parseFloat(rs.getString("i_price"));
-            int qty=Integer.parseInt(rs.getString("quantity"));
-            
-            float tot=price*qty;
-           txtCusID.setText(Float.toString(tot));*/
             }
-
+           
+         
+            
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, e);
         }
-    }//GEN-LAST:event_confirm1ActionPerformed
+       
+    }//GEN-LAST:event_btnLoadActionPerformed
 
     private void txtPaybleFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtPaybleFocusGained
         if (txtAmountPay.getText().equals("0.00"))
@@ -594,6 +674,30 @@ public class Cashier extends javax.swing.JFrame {
        txtBalance.setText(Double.toString(cus_balance));
        
     }//GEN-LAST:event_txtAmountPayKeyPressed
+
+    private void confirmActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_confirmActionPerformed
+        String BillID=txt_billD.getText();
+        int cashID=Integer.parseInt(txt_nicID.getText());
+        double  paied=Double.parseDouble(txtPayble.getText());
+        double  Discount=Double.parseDouble(txtDisc.getText());
+        
+        
+        
+        try {
+            String sql="INSERT INTO pay_bill (bill_id,cash_id,total_discount,total_price)values ('"+BillID+"','"+cashID+"','"+Discount+"','"+paied+"')";
+            pst=con.prepareStatement(sql);
+            pst.execute();
+            
+            String sqlUP="UPDATE bill SET status='Paied' WHERE bill_id='"+BillID+"'";
+            pstUP=con.prepareStatement(sqlUP);
+            pstUP.execute();
+            
+            JOptionPane.showMessageDialog(null, "Payment Successfull");
+            
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, e);
+        }
+    }//GEN-LAST:event_confirmActionPerformed
 
     /**
      * @param args the command line arguments
@@ -633,15 +737,17 @@ public class Cashier extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton QR;
     private javax.swing.JTable bill;
+    private javax.swing.JButton btnLoad;
     private javax.swing.JButton cancel;
     private javax.swing.JButton close;
     private javax.swing.JButton confirm;
-    private javax.swing.JButton confirm1;
     private javax.swing.JLabel discount;
+    private javax.swing.JLabel discount1;
+    private javax.swing.JLabel discount2;
+    private javax.swing.JLabel discount3;
+    private javax.swing.JLabel discount4;
     private javax.swing.JPanel head;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel10;
-    private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -651,11 +757,14 @@ public class Cashier extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JButton logout;
     private javax.swing.JButton minimize;
-    private javax.swing.JLabel photo;
     private javax.swing.JTextField txtAmountPay;
     private javax.swing.JLabel txtBalance;
     private javax.swing.JLabel txtDisc;
     private javax.swing.JLabel txtPayble;
+    private javax.swing.JLabel txt_billD;
+    private javax.swing.JLabel txt_nic;
+    private javax.swing.JLabel txt_nicID;
     private javax.swing.JLabel txt_tot;
+    private javax.swing.JLabel txtcashName;
     // End of variables declaration//GEN-END:variables
 }
